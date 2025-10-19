@@ -1,31 +1,24 @@
 <!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Live Skript Variable</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <style>body{font-family:system-ui,Arial;margin:32px}.v{font-size:28px;font-weight:700}.m{color:#666}</style>
-</head>
-<body>
-  <h1>Skript variable: <code>test</code></h1>
-  <div class="v" id="val">loading…</div>
-  <div class="m" id="ts"></div>
-
-  <script>
-    const RAW = "https://raw.githubusercontent.com/OWNER/REPO/BRANCH/data/test.json";
-    async function load() {
-      try {
-        const res = await fetch(RAW + "?t=" + Date.now(), { cache: "no-store" });
-        const j = await res.json();
-        document.getElementById("val").textContent = j.value ?? "(empty)";
-        document.getElementById("ts").textContent = "Updated: " + (j.ts || "");
-      } catch (e) {
-        document.getElementById("val").textContent = "(error)";
-        document.getElementById("ts").textContent = "";
-      }
+<meta charset="utf-8">
+<title>Live Skript Variable</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:system-ui,Arial;margin:32px}.v{font-size:28px;font-weight:700}.m{color:#666}</style>
+<h1>Skript variable: <code>test</code></h1>
+<div class="v" id="val">loading…</div>
+<div class="m" id="ts"></div>
+<script>
+  const URL = "https://AKx5x.github.io/testformax/data/test.json"; // or raw.githubusercontent.com/<user>/<repo>/<branch>/data/test.json
+  async function load() {
+    try {
+      const r = await fetch(URL + "?t=" + Date.now(), { cache: "no-store" });
+      const j = await r.json();
+      document.getElementById("val").textContent = j.value ?? "(empty)";
+      document.getElementById("ts").textContent = "Updated: " + (j.ts || "");
+    } catch(e) {
+      document.getElementById("val").textContent = "(error)";
+      document.getElementById("ts").textContent = "";
     }
-    load();
-    setInterval(load, 5000); // poll if you want near real time
-  </script>
-</body>
-</html>
+  }
+  load();
+  setInterval(load, 5000);
+</script>
