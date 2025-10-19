@@ -1,0 +1,31 @@
+name: Update Web Var
+
+on:
+  repository_dispatch:
+    types: [update_var]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create data folder
+        run: mkdir -p data
+
+      - name: Write JSON file
+        run: |
+          KEY="${{ github.event.client_payload.key }}"
+          VAL="${{ github.event.client_payload.value }}"
+          TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "{\"key\":\"$KEY\",\"value\":\"$VAL\",\"ts\":\"$TS\"}" > "data/$KEY.json"
+
+      - name: Commit and push
+        run: |
+          git config user.name "webvar-bot"
+          git config user.email "webvar-bot@users.noreply.github.com"
+          git add "data/${{ github.event.client_payload.key }}*.json"
+          git commit -m "update ${{ github.event.client_payload.key }}"
+          git push
